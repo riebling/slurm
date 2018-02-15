@@ -165,7 +165,7 @@ int slurm_api_set_default_config(void)
 		goto cleanup;
 	}
 
-	for (i = 1; i < MAX_CONTROLLERS; i++) {
+	for (i = 1; i < conf->control_cnt; i++) {
 		if (conf->control_addr[i]) {
 			slurm_set_addr(&proto_conf_default.controller_addr[i],
 				       conf->slurmctld_port,
