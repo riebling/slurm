@@ -256,6 +256,25 @@ uint16_t slurm_get_batch_start_timeout(void)
 	return batch_start_timeout;
 }
 
+/*
+ * slurm_get_control_cnt
+ * RET Count of SlurmctldHost records from slurm.conf
+ * (slurmctld server count, primary plus backups) 
+ */
+uint32_t slurm_get_control_cnt(void)
+{
+	uint32_t control_cnt = 0;
+	slurm_ctl_conf_t *conf;
+
+	if (slurmdbd_conf) {
+	} else {
+		conf = slurm_conf_lock();
+		control_cnt = conf->control_cnt;
+		slurm_conf_unlock();
+	}
+	return control_cnt;
+}
+
 /* slurm_get_suspend_timeout
  * RET SuspendTimeout value from slurm.conf
  */

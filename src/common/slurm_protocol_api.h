@@ -110,6 +110,13 @@ extern slurm_protocol_config_t *slurm_get_api_config(void);
  */
 uint16_t slurm_get_batch_start_timeout(void);
 
+/*
+ * slurm_get_control_cnt
+ * RET Count of SlurmctldHost records from slurm.conf
+ * (slurmctld server count, primary plus backups) 
+ */
+uint32_t slurm_get_control_cnt(void);
+
 /* slurm_get_suspend_timeout
  * RET SuspendTimeout value from slurm.conf
  */
