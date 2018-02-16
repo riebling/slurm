@@ -462,6 +462,7 @@ typedef struct forward_message {
 } forward_msg_t;
 
 typedef struct slurm_protocol_config {
+	uint32_t control_cnt;
 	slurm_addr_t controller_addr[MAX_CONTROLLERS];
 } slurm_protocol_config_t;
 

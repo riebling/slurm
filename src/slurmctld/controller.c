@@ -3236,7 +3236,7 @@ static void _become_slurm_user(void)
 }
 
 /* If this computer is a backup slurmctld, return it's index in the controller
- * table (1 to MAX_CONTROLLERS). Otherwise return -1; */
+ * table. Otherwise return -1; */
 static int _backup_index(void)
 {
 	int i;

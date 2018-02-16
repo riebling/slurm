@@ -156,6 +156,8 @@ int slurm_api_set_default_config(void)
 		goto cleanup;
 	}
 
+	proto_conf_default.control_cnt = MIN(conf->control_cnt,
+					     MAX_CONTROLLERS);
 	slurm_set_addr(&proto_conf_default.controller_addr[0],
 		       conf->slurmctld_port,
 		       conf->control_addr[0]);
@@ -165,7 +167,7 @@ int slurm_api_set_default_config(void)
 		goto cleanup;
 	}
 
-	for (i = 1; i < conf->control_cnt; i++) {
+	for (i = 1; i < proto_conf_default.control_cnt; i++) {
 		if (conf->control_addr[i]) {
 			slurm_set_addr(&proto_conf_default.controller_addr[i],
 				       conf->slurmctld_port,
@@ -3028,11 +3030,13 @@ extern int slurm_open_controller_conn(slurm_addr_t *addr, bool *use_backup,
 			return SLURM_FAILURE;
 		myproto = xmalloc(sizeof(slurm_protocol_config_t));
 		memcpy(myproto, proto_conf, sizeof(slurm_protocol_config_t));
-		myproto->controller_addr[0].sin_port =
-				htons(slurmctld_conf.slurmctld_port +
-				(((time(NULL) + getpid()) %
-				slurmctld_conf.slurmctld_port_count)));
-		for (i = 0; i < MAX_CONTROLLERS; i++) {
+		if (myproto->control_cnt) {
+			myproto->controller_addr[0].sin_port =
+					htons(slurmctld_conf.slurmctld_port +
+					(((time(NULL) + getpid()) %
+					slurmctld_conf.slurmctld_port_count)));
+		}
+		for (i = 1; i < myproto->control_cnt; i++) {
 			myproto->controller_addr[i].sin_port =
 					myproto->controller_addr[0].sin_port;
 		}
@@ -3072,7 +3076,7 @@ extern int slurm_open_controller_conn(slurm_addr_t *addr, bool *use_backup,
 
 				if (retry == 0) {
 					conf = slurm_conf_lock();
-					for (i = 1; i < MAX_CONTROLLERS; i++) {
+					for (i = 1; i < conf->control_cnt; i++){
 						if (conf->control_machine[i])
 							backup_cnt = i;
 					}
