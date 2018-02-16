@@ -93,18 +93,6 @@ char *slurm_get_sbcast_parameters(void);
  */
 int slurm_get_auth_ttl(void);
 
-/* slurm_set_api_config
- * sets the slurm_protocol_config object
- * IN protocol_conf		-  slurm_protocol_config object
- */
-extern int slurm_set_api_config(slurm_protocol_config_t * protocol_conf);
-
-/* slurm_get_api_config
- * returns a pointer to the current slurm_protocol_config object
- * RET slurm_protocol_config_t	- current slurm_protocol_config object
- */
-extern slurm_protocol_config_t *slurm_get_api_config(void);
-
 /* slurm_get_batch_start_timeout
  * RET BatchStartTimeout value from slurm.conf
  */
@@ -230,7 +218,7 @@ extern uint16_t slurm_get_tcp_timeout(void);
  *	the compiled in default slurm_protocol_config object is initialized
  * RET int 		- return code
  */
-extern int slurm_api_set_default_config();
+extern int slurm_api_set_default_config(void);
 
 /* slurm_api_clear_config
  * execute this only at program termination to free all memory */

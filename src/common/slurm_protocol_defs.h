@@ -461,9 +461,10 @@ typedef struct forward_message {
 	int timeout;
 } forward_msg_t;
 
+#define MAX_CONTROL_CNT 100
 typedef struct slurm_protocol_config {
 	uint32_t control_cnt;
-	slurm_addr_t controller_addr[MAX_CONTROLLERS];
+	slurm_addr_t controller_addr[MAX_CONTROL_CNT];
 } slurm_protocol_config_t;
 
 typedef struct slurm_msg {

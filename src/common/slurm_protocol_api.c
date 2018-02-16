@@ -110,29 +110,9 @@ slurm_dbd_conf_t *slurmdbd_conf = NULL;
 /**********************************************************************\
  * protocol configuration functions
 \**********************************************************************/
-/* slurm_set_api_config
- * sets the slurm_protocol_config object
- * NOT THREAD SAFE
- * IN protocol_conf		-  slurm_protocol_config object
- *
- * XXX: Why isn't the "config_lock" mutex used here?
- */
-int slurm_set_api_config(slurm_protocol_config_t * protocol_conf)
-{
-	proto_conf = protocol_conf;
-	return SLURM_SUCCESS;
-}
 
-/* slurm_get_api_config
- * returns a pointer to the current slurm_protocol_config object
- * RET slurm_protocol_config_t  - current slurm_protocol_config object
- */
-slurm_protocol_config_t *slurm_get_api_config(void)
-{
-	return proto_conf;
-}
-
-/* slurm_api_set_default_config
+/*
+ * slurm_api_set_default_config
  *      called by the send_controller_msg function to ensure that at least
  *	the compiled in default slurm_protocol_config object is initialized
  * RET int		 - return code
@@ -145,7 +125,8 @@ int slurm_api_set_default_config(void)
 
 	conf = slurm_conf_lock();
 
-	if (conf->control_addr[0] == NULL) {
+	if (!conf->control_cnt ||
+	    !conf->control_addr || !conf->control_addr[0]) {
 		error("Unable to establish controller machine");
 		rc = SLURM_ERROR;
 		goto cleanup;
@@ -157,7 +138,7 @@ int slurm_api_set_default_config(void)
 	}
 
 	proto_conf_default.control_cnt = MIN(conf->control_cnt,
-					     MAX_CONTROLLERS);
+					     MAX_CONTROL_CNT);
 	slurm_set_addr(&proto_conf_default.controller_addr[0],
 		       conf->slurmctld_port,
 		       conf->control_addr[0]);
