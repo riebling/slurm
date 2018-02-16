@@ -1500,10 +1500,8 @@ static void _load_slurmctld_host(slurm_ctl_conf_t *conf)
 
 	rc = s_p_get_array((void ***)&ptr, &count, "SlurmctldHost",
 			   conf_hashtbl);
-	if ((rc == 0) || (count < 2))
-		count = 2;
-	conf->control_machine = xmalloc(sizeof(char *) * (count + 1));
-	conf->control_addr    = xmalloc(sizeof(char *) * (count + 1));
+	conf->control_machine = xmalloc(sizeof(char *) * (count + 2));
+	conf->control_addr    = xmalloc(sizeof(char *) * (count + 2));
 	if (rc == 0)
 		return;
 
