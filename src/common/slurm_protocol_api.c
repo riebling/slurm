@@ -3126,15 +3126,13 @@ extern int slurm_open_controller_conn_spec(int dest,
 				comm_cluster_rec->control_host);
 		}
 		addr = &comm_cluster_rec->control_addr;
-	} else if (dest == 0) {	/* Primary */
-		addr = &proto_conf->controller_addr[0];
 	} else {	/* Some backup slurmctld */
 		if (!(proto_conf = _slurm_api_get_comm_config())) {
 			debug3("Error: Unable to set default config");
 			return SLURM_ERROR;
 		}
 		addr = NULL;
-		if ((dest > 0) && (dest <= proto_conf->control_cnt))
+		if ((dest >= 0) && (dest <= proto_conf->control_cnt))
 			addr = &proto_conf->controller_addr[dest];
 		if (!addr) {
 			rc = SLURM_ERROR;
