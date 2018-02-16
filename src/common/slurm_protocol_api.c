@@ -3080,12 +3080,13 @@ extern int slurm_open_controller_conn(slurm_addr_t *addr, bool *use_backup,
 				}
 				debug("Failed to contact primary controller: %m");
 			}
-			if (*use_backup) {
+			if ((proto_conf->control_cnt > 0) || *use_backup) {
 				for (i = 1; i <= proto_conf->control_cnt; i++) {
 					fd = slurm_open_msg_conn(
 						&proto_conf->controller_addr[i]);
 					if (fd >= 0) {
-						debug("Contacted backup controller");
+						debug("Contacted backup controller %d",
+						      (i - 1));
 						*use_backup = true;
 						goto end_it;
 					}
