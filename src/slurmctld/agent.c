@@ -979,9 +979,7 @@ static void *_thread_per_group_rpc(void *args)
 			rc = SLURM_SUCCESS;
 			lock_slurmctld(job_write_lock);
 			if (job_epilog_complete(kill_job->job_id,
-						ret_data_info->
-						node_name,
-						rc))
+						ret_data_info->node_name, rc))
 				run_scheduler = true;
 			unlock_slurmctld(job_write_lock);
 		}
@@ -1381,6 +1379,7 @@ extern void agent_init(void)
 	}
 
 	slurm_thread_create_detached(NULL, _agent_init, NULL);
+	pending_thread_running = true;
 	slurm_mutex_unlock(&pending_mutex);
 }
 

@@ -588,6 +588,7 @@ int main(int argc, char **argv)
 		if (!slurmctld_primary) {
 			slurm_sched_fini();	/* make sure shutdown */
 			run_backup(&callbacks);
+			agent_init();	/* Killed at any previous shutdown */
 			(void) _shutdown_backup_controller();
 			if (slurm_acct_storage_init(NULL) != SLURM_SUCCESS)
 				fatal("failed to initialize accounting_storage plugin");
