@@ -907,7 +907,8 @@ static void *_thread_per_group_rpc(void *args)
 	msg.msg_type = msg_type;
 	msg.data     = task_ptr->msg_args_ptr;
 #if 0
- 	info("sending message type %u to %s", msg_type, thread_ptr->nodelist);
+	info("%s: sending %s to %s", __func__, rpc_num2string(msg_type),
+	     thread_ptr->nodelist);
 #endif
 	if (task_ptr->get_reply) {
 		if (thread_ptr->addr) {
